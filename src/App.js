@@ -37,7 +37,8 @@ const theme = {
   lightGrey2: "#E8e8e8",
   lightGrey3: "#C0C0C0",
   lightGrey4: "#9E9E9E",
-  red: "#D50000"
+  red: "#D50000",
+  red2: "#D8000C"
 };
 const App = () => {
   return (

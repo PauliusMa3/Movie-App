@@ -4,6 +4,7 @@ import Movie from "./Movie";
 import queryString from "query-string";
 import { withRouter } from "react-router-dom";
 import styled from "styled-components";
+import ErrorMessage from "./ErrorMessage";
 
 const Wrapper = styled.div`
   background: ${props => props.theme.white};
@@ -44,27 +45,35 @@ const Movies = props => {
     axios
       .get(url)
       .then(result => {
-        setMovies(result.data.Search);
+        if (result.data.Search) {
+          setMovies(result.data.Search);
+        } else {
+          setError(
+            `No ${props.location.state.type} was found for keyword ${
+              values.query
+            }`
+          );
+        }
+
         console.log("returned Movies", result.data.Search);
       })
-      .catch(e =>
+      .catch(e => {
+        console.log("Error has been caught");
         setError(
           `We have not found any ${props.location.state.type} with the name "${
             values.query
           }"`
-        )
-      );
+        );
+      });
   }, [props.location]);
 
-  let errorMessage = null;
-  if (error) {
-    errorMessage = <p>{error}</p>;
-  }
+  console.log("state error value", error);
   return (
     <Wrapper>
       <Container>
-        {errorMessage}
-        {!errorMessage && (
+        {error ? (
+          <ErrorMessage error={error} />
+        ) : (
           <Ul>
             {movies.map((movie, index) => (
               <Movie key={index} movie={movie} />
